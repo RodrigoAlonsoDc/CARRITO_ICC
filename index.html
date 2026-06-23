@@ -1,178 +1,284 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tu Carrito Premium</title>
-    <!-- Premium Font: Outfit -->
+    <title>Pasarela de Pago Express</title>
+    <!-- Fuentes de ICC.com.pe -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&family=League+Spartan:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <!-- PayPal SDK (client-id=sb es para pruebas/sandbox, cámbialo por tu Client ID de producción) -->
-    <!-- Se configura en USD ya que PayPal no soporta Soles Peruanos (PEN) nativamente -->
     <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
 </head>
+
 <body>
-    <div class="cart-container" x-data="cartApp()">
-        <div class="cart-header">
-            <h2>Tu Carrito de Compras</h2>
-        </div>
+    <div class="checkout-container" x-data="checkoutApp()" x-init="init()">
+        <div class="checkout-layout">
 
-        <div class="cart-items">
-            <!-- Render dinámico con Alpine.js -->
-            <template x-for="item in items" :key="item.id">
-                <div class="cart-item">
-                    <div class="item-info">
-                        <strong x-text="item.name"></strong>
-                        <span x-text="'Cantidad: ' + item.quantity"></span>
+            <!-- Columna Izquierda: Información de Compra del Curso -->
+            <div class="course-column">
+                <div>
+                    <div class="brand">E-Learning Academy</div>
+                    <div class="course-info">
+                        <h1 x-text="courseName">Cargando curso...</h1>
+                        <p class="course-description">
+                            Obtén acceso inmediato al aula virtual, material complementario de descarga y certificación
+                            al finalizar. Aprende a tu propio ritmo.
+                        </p>
                     </div>
-                    <!-- Mostramos en Soles en el Carrito local -->
-                    <div class="item-price" x-text="'S/ ' + (item.price * item.quantity).toFixed(2)"></div>
+
+                    <div class="course-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Acceso ilimitado de por vida</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Soporte directo del instructor</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Garantía de satisfacción de 7 días</span>
+                        </div>
+                    </div>
                 </div>
-            </template>
+
+                <div class="price-box">
+                    <div class="price-label">Monto total a pagar</div>
+                    <div class="price-amount">
+                        <span x-text="currencySymbol">S/</span>
+                        <span x-text="coursePrice.toFixed(2)">0.00</span>
+                        <span class="price-currency" x-text="currency">PEN</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Opciones de Pago -->
+            <div class="payment-column">
+                <div class="payment-header">
+                    <h2>Método de Pago</h2>
+                </div>
+
+                <!-- Tabs para alternar entre métodos de pago -->
+                <div class="payment-tabs">
+                    <button class="tab-btn" :class="{ 'active': activeTab === 'manual' }" @click="setTab('manual')">
+                        📱 Yape / Plin
+                    </button>
+                    <button class="tab-btn" :class="{ 'active': activeTab === 'paypal' }" @click="setTab('paypal')">
+                        💳 PayPal / Tarjeta
+                    </button>
+                </div>
+
+                <div class="tab-content">
+                    <!-- Vista Yape / Plin -->
+                    <div class="wallet-view" x-show="activeTab === 'manual'" x-transition>
+                        <div class="digital-wallets">
+                            <div class="wallet-card" :class="{ 'active': manualMethod === 'yape' }"
+                                @click="setManualMethod('yape')">
+                                <div class="wallet-logo">🟣</div>
+                                <span>Yape</span>
+                            </div>
+                            <div class="wallet-card" :class="{ 'active': manualMethod === 'plin' }"
+                                @click="setManualMethod('plin')">
+                                <div class="wallet-logo">🟢</div>
+                                <span>Plin</span>
+                            </div>
+                        </div>
+
+                        <div class="wallet-details" x-show="manualMethod">
+                            <div class="qr-container">
+                                <img :src="manualDetails[manualMethod]?.qrUrl" alt="Código QR" class="qr-image">
+                            </div>
+
+                            <div class="payment-info-box">
+                                <div class="info-row">
+                                    <span>Titular:</span>
+                                    <span x-text="manualDetails[manualMethod]?.name">Cargando...</span>
+                                </div>
+                                <div class="info-row">
+                                    <span>Celular:</span>
+                                    <span x-text="manualDetails[manualMethod]?.phone">Cargando...</span>
+                                </div>
+                                <div class="info-row"
+                                    style="border-top: 1px dashed var(--surface-border); margin-top: 8px; padding-top: 8px;">
+                                    <span>Monto a transferir:</span>
+                                    <span style="color: var(--primary); font-weight: 700;"
+                                        x-text="'S/ ' + amountInSoles.toFixed(2) + ' PEN'"></span>
+                                </div>
+                                <template x-if="currency === 'USD'">
+                                    <div class="info-row" style="font-size: 0.8rem; color: var(--text-secondary);">
+                                        <span>(Convertido de:</span>
+                                        <span
+                                            x-text="'$' + coursePrice.toFixed(2) + ' USD al cambio ' + tipoCambio.toFixed(2) + ')'"></span>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <div class="voucher-section">
+                                <div class="file-upload-box" @click="document.getElementById('voucher_upload').click()">
+                                    <span class="file-upload-label"
+                                        x-text="voucherFile ? '✓ ' + voucherFile.name : 'Subir captura o foto del voucher' "></span>
+                                    <input type="file" id="voucher_upload" style="display: none;"
+                                        @change="voucherFile = $event.target.files[0]" accept="image/*,application/pdf">
+                                </div>
+                            </div>
+
+                            <button @click="submitManualPayment()" class="btn-submit" :disabled="!voucherFile">
+                                Confirmar mi inscripción
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Vista PayPal -->
+                    <div class="paypal-view" x-show="activeTab === 'paypal'" x-transition>
+                        <p class="paypal-instructions">
+                            Inicia sesión en tu cuenta de PayPal o procesa el pago de forma segura con tarjeta de
+                            crédito/débito en dólares.
+                        </p>
+
+                        <template x-if="currency === 'PEN'">
+                            <p
+                                style="font-size: 0.85rem; color: var(--text-secondary); text-align: center; margin-bottom: 15px;">
+                                (Equivalente para PayPal: <strong style="color: var(--text-primary);"
+                                    x-text="'$' + amountInUSD.toFixed(2) + ' USD'"></strong> al cambio de <span
+                                    x-text="tipoCambio"></span>)
+                            </p>
+                        </template>
+
+                        <!-- Contenedor del Botón Inteligente de PayPal -->
+                        <div id="paypal-button-container"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Generador de Enlaces de Pago para Administración (TikTok y Ofertas Especiales) -->
+    <!-- Solo se muestra si añades ?admin=true a la URL -->
+    <div class="admin-card" x-data="adminPanel()" x-show="visible" x-transition>
+        <div class="admin-header">
+            <h3>Generador de Enlaces de Pago</h3>
+            <span class="admin-badge">Admin Panel</span>
         </div>
 
-        <div class="cart-total">
-            <div style="display: flex; flex-direction: column; width: 100%; gap: 4px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <strong>Total en Soles:</strong>
-                    <span id="monto_total" x-text="'S/ ' + totalPEN.toFixed(2)"></span>
-                </div>
-                <!-- Mostramos la conversión estimada a USD para PayPal -->
-                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; color: var(--text-secondary);">
-                    <span>Equivalente en Dólares (PayPal):</span>
-                    <span x-text="'$' + totalUSD.toFixed(2) + ' USD'"></span>
-                </div>
+        <div class="admin-grid">
+            <div class="form-group">
+                <label for="admin_curso">Nombre del Curso</label>
+                <input type="text" id="admin_curso" class="form-control" x-model="courseName"
+                    placeholder="Ej: Curso TikTok Premium">
+            </div>
+            <div class="form-group">
+                <label for="admin_precio">Precio Especial</label>
+                <input type="number" id="admin_precio" class="form-control" x-model.number="price" placeholder="Ej: 20">
+            </div>
+            <div class="form-group">
+                <label for="admin_moneda">Moneda</label>
+                <select id="admin_moneda" class="form-control" x-model="currency">
+                    <option value="USD">Dólares (USD)</option>
+                    <option value="PEN">Soles (PEN)</option>
+                </select>
             </div>
         </div>
 
-        <button @click="openPaymentModal()" class="btn-culqi" :disabled="items.length === 0">
-            Confirmar compra
-        </button>
+        <div class="admin-actions">
+            <button @click="generateLink()" class="btn-submit" style="margin-top: 0; padding: 12px 20px;">
+                Generar Enlace
+            </button>
 
-        <!-- Modal de Métodos de Pago -->
-        <div class="modal-overlay" :style="paymentModalOpen ? 'display: flex' : 'display: none'">
-            <div class="modal-content" @click.away="paymentModalOpen = false">
-                <span class="close-modal" @click="paymentModalOpen = false">&times;</span>
-
-                <!-- Paso 1: Selección de Método -->
-                <div x-show="paymentStep === 1">
-                    <h3>Selecciona tu método de pago</h3>
-                    <div class="payment-options">
-                        <div class="payment-card" id="pay_yape" @click="selectMethod('yape')">
-                            <div class="payment-icon">📱</div>
-                            <span>Yape</span>
-                        </div>
-                        <div class="payment-card" id="pay_plin" @click="selectMethod('plin')">
-                            <div class="payment-icon">📱</div>
-                            <span>Plin</span>
-                        </div>
-                        <div class="payment-card" id="pay_paypal" @click="selectMethod('paypal')">
-                            <div class="payment-icon">💳</div>
-                            <span>PayPal</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Paso 2: Detalles de Pago Manual (Yape/Plin) -->
-                <div x-show="paymentStep === 2">
-                    <h3 :style="'color: ' + (manualPaymentDetails[paymentMethod]?.color || '#000000')" x-text="manualPaymentDetails[paymentMethod]?.title"></h3>
-                    <div class="manual-payment-info">
-                        <img :src="manualPaymentDetails[paymentMethod]?.qrUrl" alt="QR de Pago" class="qr-image" :style="'border-color: ' + (manualPaymentDetails[paymentMethod]?.color || '#e2e8f0')">
-                        <div class="details">
-                            <p><strong>Titular:</strong> <span x-text="manualPaymentDetails[paymentMethod]?.name"></span></p>
-                            <p><strong>Celular:</strong> <span x-text="manualPaymentDetails[paymentMethod]?.phone"></span></p>
-                            <p><strong>Monto a yapear:</strong> <span x-text="'S/ ' + totalPEN.toFixed(2)"></span></p>
-                        </div>
-                    </div>
-                    <div class="voucher-section">
-                        <label for="voucher_upload">Adjunta tu ticket/voucher de pago:</label>
-                        <input type="file" id="voucher_upload" @change="voucherFile = $event.target.files[0]" accept="image/*,application/pdf" class="file-input">
-                    </div>
-                    <button @click="submitManualPayment()" class="btn-culqi" style="margin-top: 15px;">
-                        Confirmar y enviar comprobante
-                    </button>
-                    <button @click="paymentStep = 1" class="btn-secondary">Volver atrás</button>
-                </div>
-
-                <!-- Paso 3: Integración de PayPal -->
-                <div x-show="paymentStep === 3">
-                    <h3>Pagar con PayPal</h3>
-                    <p style="text-align: center; margin-bottom: 20px; font-size: 0.95rem; color: var(--text-secondary);">
-                        Vas a realizar el pago de <strong style="color: var(--text-primary);" x-text="'$' + totalUSD.toFixed(2) + ' USD'"></strong> correspondiente a tu compra.
-                    </p>
-                    
-                    <!-- Contenedor donde PayPal inyectará los botones oficiales -->
-                    <div id="paypal-button-container" style="min-height: 150px; margin-top: 10px;"></div>
-                    
-                    <button @click="paymentStep = 1" class="btn-secondary" style="margin-top: 15px;">Volver atrás</button>
-                </div>
+            <div class="link-result-box" x-show="generatedLink">
+                <input type="text" readonly :value="generatedLink" id="generated_link_input" class="link-input">
+                <button @click="copyLink()" class="btn-copy">Copiar Link</button>
             </div>
         </div>
     </div>
 
-    <!-- Definimos primero la lógica de nuestro carrito en JS -->
-    <script>
-        function cartApp() {
-            return {
-                // Estado del carrito (puedes añadir o modificar productos aquí)
-                items: [
-                    { id: 1, name: 'Camiseta de Algodón', price: 50.00, quantity: 2 },
-                    { id: 2, name: 'Taza Personalizada', price: 50.00, quantity: 1 }
-                ],
-                paymentModalOpen: false,
-                paymentStep: 1,
-                paymentMethod: '',
-                voucherFile: null,
-                
-                // Tipo de cambio estimado S/ a USD (1 USD = 3.80 Soles)
-                tipoCambio: 3.80, 
 
-                manualPaymentDetails: {
+    <!-- Script de Configuración de la Pasarela -->
+    <script>
+        function checkoutApp() {
+            return {
+                // Estado dinámico cargado desde la URL
+                courseName: '',
+                coursePrice: 30.00,
+                currency: 'USD',
+
+                // Tipo de cambio para conversiones USD <-> PEN
+                tipoCambio: 3.80,
+
+                // Pestaña activa ('manual' o 'paypal')
+                activeTab: 'manual',
+
+                // Submétodo manual activo ('yape' o 'plin')
+                manualMethod: 'yape',
+                voucherFile: null,
+
+                // Datos de Yape y Plin (Ajusta tus datos reales aquí)
+                manualDetails: {
                     yape: {
                         title: 'Pago con Yape',
-                        qrUrl: 'https://via.placeholder.com/200x200/7400b8/ffffff?text=QR+Yape', // Remplaza con tu QR real
+                        qrUrl: 'https://via.placeholder.com/200x200/7400b8/ffffff?text=QR+Yape',
                         color: '#7400b8',
                         name: 'Tu Nombre Apellido',
                         phone: '999 999 999'
                     },
                     plin: {
                         title: 'Pago con Plin',
-                        qrUrl: 'https://via.placeholder.com/200x200/00c8b0/ffffff?text=QR+Plin', // Remplaza con tu QR real
+                        qrUrl: 'https://via.placeholder.com/200x200/00c8b0/ffffff?text=QR+Plin',
                         color: '#00c8b0',
                         name: 'Tu Nombre Apellido',
                         phone: '999 999 999'
                     }
                 },
 
-                get totalPEN() {
-                    return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                get currencySymbol() {
+                    return this.currency === 'USD' ? '$' : 'S/ ';
                 },
 
-                get totalUSD() {
-                    // Conversión de Soles a Dólares
-                    return parseFloat((this.totalPEN / this.tipoCambio).toFixed(2));
+                get amountInUSD() {
+                    if (this.currency === 'USD') return this.coursePrice;
+                    return parseFloat((this.coursePrice / this.tipoCambio).toFixed(2));
                 },
 
-                openPaymentModal() {
-                    this.paymentStep = 1;
-                    this.paymentModalOpen = true;
-                    this.voucherFile = null;
+                get amountInSoles() {
+                    if (this.currency === 'PEN') return this.coursePrice;
+                    return parseFloat((this.coursePrice * this.tipoCambio).toFixed(2));
                 },
 
-                selectMethod(method) {
-                    this.paymentMethod = method;
-                    if (method === 'paypal') {
-                        this.paymentStep = 3;
-                        // Usamos setTimeout de 50ms para asegurar que el contenedor DOM esté renderizado antes de que PayPal dibuje los botones
-                        setTimeout(() => {
-                            this.renderPayPalButtons();
-                        }, 50);
-                    } else {
-                        this.paymentStep = 2;
+                init() {
+                    // 1. Cargar parámetros desde la URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    this.courseName = urlParams.get('curso') || 'Curso Completo de Marketing y Ventas';
+                    this.coursePrice = parseFloat(urlParams.get('precio')) || 30.00;
+                    this.currency = (urlParams.get('moneda') || 'USD').toUpperCase();
+
+                    // Si la moneda es USD, abrimos PayPal por defecto, si es PEN abrimos Yape/Plin por defecto
+                    this.activeTab = this.currency === 'USD' ? 'paypal' : 'manual';
+
+                    // Renderizamos los botones si la pestaña inicial es PayPal
+                    if (this.activeTab === 'paypal') {
+                        setTimeout(() => this.renderPayPalButtons(), 100);
                     }
+                },
+
+                setTab(tab) {
+                    this.activeTab = tab;
+                    if (tab === 'paypal') {
+                        setTimeout(() => this.renderPayPalButtons(), 50);
+                    }
+                },
+
+                setManualMethod(method) {
+                    this.manualMethod = method;
                 },
 
                 submitManualPayment() {
@@ -180,57 +286,96 @@
                         alert('Por favor, adjunta tu ticket o voucher de pago para continuar.');
                         return;
                     }
-                    
-                    alert('¡Comprobante enviado exitosamente! Validaremos tu pago en breve.');
-                    this.paymentModalOpen = false;
-                    this.items = []; // Vaciar carrito después de confirmar
+
+                    alert('¡Comprobante enviado con éxito! Tu inscripción está siendo validada y recibirás tus accesos al correo en un lapso de 15 minutos.');
+                    this.voucherFile = null;
                 },
 
                 renderPayPalButtons() {
                     const container = document.getElementById('paypal-button-container');
                     if (!container) return;
-                    
-                    // Si ya se cargaron los botones previamente, no los duplicamos
+
+                    // No duplicar botones
                     if (container.children.length > 0) return;
 
-                    // Verificamos que el SDK de PayPal se haya cargado correctamente
                     if (typeof paypal === 'undefined') {
-                        console.error('El SDK de PayPal no pudo cargarse.');
-                        alert('El SDK de PayPal no pudo cargarse. Intente recargar la página o desactive bloqueadores de anuncios.');
+                        console.error('PayPal SDK no disponible.');
                         return;
                     }
 
                     const self = this;
                     paypal.Buttons({
-                        createOrder: function(data, actions) {
+                        createOrder: function (data, actions) {
                             return actions.order.create({
                                 purchase_units: [{
                                     amount: {
                                         currency_code: 'USD',
-                                        value: self.totalUSD.toString()
+                                        value: self.amountInUSD.toString()
                                     },
-                                    description: 'Compra en Carrito Premium'
+                                    description: `Acceso al curso: ${self.courseName}`
                                 }]
                             });
                         },
-                        onApprove: function(data, actions) {
-                            return actions.order.capture().then(function(details) {
-                                alert('¡Pago realizado con éxito por PayPal! Gracias por tu compra, ' + details.payer.name.given_name + '.');
-                                self.paymentModalOpen = false;
-                                self.items = []; // Vaciar carrito tras la compra
+                        onApprove: function (data, actions) {
+                            return actions.order.capture().then(function (details) {
+                                alert(`¡Inscripción confirmada! Pago recibido exitosamente por PayPal. Bienvenido/a al curso, ${details.payer.name.given_name}.`);
+                                console.log('PayPal details:', details);
                             });
                         },
-                        onError: function(err) {
-                            console.error('Error en pasarela PayPal:', err);
-                            alert('Hubo un problema procesando el pago con PayPal. Intente nuevamente.');
+                        onError: function (err) {
+                            console.error('PayPal Error:', err);
+                            alert('Hubo un inconveniente con el pago en PayPal. Por favor, intente de nuevo.');
                         }
                     }).render('#paypal-button-container');
                 }
             }
         }
-    </script>
 
-    <!-- Cargamos Alpine.js al final, garantizando que el DOM y cartApp() ya estén cargados y disponibles -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        function adminPanel() {
+            return {
+                visible: false,
+                courseName: '',
+                price: 30,
+                currency: 'USD',
+                generatedLink: '',
+
+                init() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    // El panel solo es visible si añadimos ?admin=true en la URL
+                    this.visible = urlParams.get('admin') === 'true';
+
+                    // Rellenar valores iniciales
+                    this.courseName = urlParams.get('curso') || 'Curso Completo de Marketing y Ventas';
+                    this.price = parseFloat(urlParams.get('precio')) || 30.00;
+                    this.currency = (urlParams.get('moneda') || 'USD').toUpperCase();
+                },
+
+                generateLink() {
+                    const baseUrl = window.location.origin + window.location.pathname;
+                    const params = new URLSearchParams();
+                    params.set('curso', this.courseName);
+                    params.set('precio', this.price.toFixed(2));
+                    params.set('moneda', this.currency);
+
+                    this.generatedLink = `${baseUrl}?${params.toString()}`;
+                },
+
+                copyLink() {
+                    const copyText = document.getElementById("generated_link_input");
+                    copyText.select();
+                    copyText.setSelectionRange(0, 99999); // Para móviles
+
+                    navigator.clipboard.writeText(copyText.value)
+                        .then(() => {
+                            alert("¡Enlace de pago copiado al portapapeles! Ya puedes enviarlo por WhatsApp o redes sociales.");
+                        })
+                        .catch(err => {
+                            console.error("Error al copiar enlace:", err);
+                        });
+                }
+            }
+        }
+    </script>
 </body>
+
 </html>
