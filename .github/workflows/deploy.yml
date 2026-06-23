@@ -15,24 +15,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 🚀 Subir a cPanel por SFTP
-        env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_KEY: ${{ secrets.FTP_KEY }}
-          FTP_KEY_PASSPHRASE: ${{ secrets.FTP_KEY_PASSPHRASE }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$FTP_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          # Remover la passphrase de la llave SSH
-          ssh-keygen -p -P "$FTP_KEY_PASSPHRASE" -N "" -f ~/.ssh/id_rsa
-          
-          # Crear la carpeta de destino en cPanel si no existe
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $FTP_USERNAME@$FTP_SERVER "mkdir -p public_html/CARRITO_PRE"
-          
-          # Copiar los archivos estáticos actuales (index.html, style.css y cualquier carpeta de recursos si la creamos)
-          # Usamos rsync para copiar todo el proyecto excepto carpetas de control de Git y GitHub Actions
-          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" \
-            --exclude='.git*' \
-            --exclude='.github' \
-            ./ $FTP_USERNAME@$FTP_SERVER:public_html/CARRITO_PRE/
+        uses: wangyucode/sftp-upload-action@v3
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          privateKey: ${{ secrets.FTP_KEY }}
+          passphrase: ${{ secrets.FTP_KEY_PASSPHRASE }}
+          localDir: '.'
+          remoteDir: 'public_html/CARRITO_PRE'
+          exclude: '.git/**,.github/**'
