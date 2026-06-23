@@ -18,7 +18,7 @@
     <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
 </head>
 <body>
-    <div class="cart-container" x-data="cartApp()" x-init="init()">
+    <div class="cart-container" x-data="cartApp()">
         <div class="cart-header">
             <h2>Tu Carrito de Compras</h2>
         </div>
@@ -130,7 +130,6 @@
                 voucherFile: null,
                 
                 // Tipo de cambio estimado S/ a USD (1 USD = 3.80 Soles)
-                // Modifica este valor de acuerdo al tipo de cambio deseado
                 tipoCambio: 3.80, 
 
                 manualPaymentDetails: {
@@ -159,11 +158,6 @@
                     return parseFloat((this.totalPEN / this.tipoCambio).toFixed(2));
                 },
 
-                init() {
-                    // Renderizamos los botones de PayPal una sola vez
-                    this.renderPayPalButtons();
-                },
-
                 openPaymentModal() {
                     this.paymentStep = 1;
                     this.paymentModalOpen = true;
@@ -174,6 +168,10 @@
                     this.paymentMethod = method;
                     if (method === 'paypal') {
                         this.paymentStep = 3;
+                        // Usamos $nextTick para garantizar que el contenedor DOM de PayPal esté montado y visible
+                        this.$nextTick(() => {
+                            this.renderPayPalButtons();
+                        });
                     } else {
                         this.paymentStep = 2;
                     }
@@ -191,6 +189,12 @@
                 },
 
                 renderPayPalButtons() {
+                    const container = document.getElementById('paypal-button-container');
+                    if (!container) return;
+                    
+                    // Si ya se cargaron los botones previamente, no los duplicamos
+                    if (container.children.length > 0) return;
+
                     // Verificamos que el SDK de PayPal se haya cargado correctamente
                     if (typeof paypal === 'undefined') {
                         console.error('El SDK de PayPal no pudo cargarse.');
@@ -199,30 +203,24 @@
 
                     const self = this;
                     paypal.Buttons({
-                        // Se llama al dar clic en el botón de PayPal
                         createOrder: function(data, actions) {
                             return actions.order.create({
                                 purchase_units: [{
                                     amount: {
                                         currency_code: 'USD',
-                                        value: self.totalUSD.toString() // Monto total en dólares convertidos
+                                        value: self.totalUSD.toString()
                                     },
                                     description: 'Compra en Carrito Premium'
                                 }]
                             });
                         },
-                        // Se ejecuta al completarse la autenticación y validación del pago del cliente
                         onApprove: function(data, actions) {
                             return actions.order.capture().then(function(details) {
-                                // Pago aprobado exitosamente en el cliente
                                 alert('¡Pago realizado con éxito por PayPal! Gracias por tu compra, ' + details.payer.name.given_name + '.');
-                                console.log('Detalles de transacción:', details);
-                                
                                 self.paymentModalOpen = false;
                                 self.items = []; // Vaciar carrito tras la compra
                             });
                         },
-                        // Si ocurre un error en la pasarela de PayPal
                         onError: function(err) {
                             console.error('Error en pasarela PayPal:', err);
                             alert('Hubo un problema procesando el pago con PayPal. Intente nuevamente.');
