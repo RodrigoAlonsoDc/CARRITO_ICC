@@ -10,9 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     
-    <!-- Alpine.js library -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
     <!-- PayPal SDK (client-id=sb es para pruebas/sandbox, cámbialo por tu Client ID de producción) -->
     <!-- Se configura en USD ya que PayPal no soporta Soles Peruanos (PEN) nativamente -->
     <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
@@ -116,6 +113,7 @@
         </div>
     </div>
 
+    <!-- Definimos primero la lógica de nuestro carrito en JS -->
     <script>
         function cartApp() {
             return {
@@ -168,10 +166,10 @@
                     this.paymentMethod = method;
                     if (method === 'paypal') {
                         this.paymentStep = 3;
-                        // Usamos $nextTick para garantizar que el contenedor DOM de PayPal esté montado y visible
-                        this.$nextTick(() => {
+                        // Usamos setTimeout de 50ms para asegurar que el contenedor DOM esté renderizado antes de que PayPal dibuje los botones
+                        setTimeout(() => {
                             this.renderPayPalButtons();
-                        });
+                        }, 50);
                     } else {
                         this.paymentStep = 2;
                     }
@@ -198,6 +196,7 @@
                     // Verificamos que el SDK de PayPal se haya cargado correctamente
                     if (typeof paypal === 'undefined') {
                         console.error('El SDK de PayPal no pudo cargarse.');
+                        alert('El SDK de PayPal no pudo cargarse. Intente recargar la página o desactive bloqueadores de anuncios.');
                         return;
                     }
 
@@ -230,5 +229,8 @@
             }
         }
     </script>
+
+    <!-- Cargamos Alpine.js al final, garantizando que el DOM y cartApp() ya estén cargados y disponibles -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
