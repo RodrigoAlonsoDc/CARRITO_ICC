@@ -12,8 +12,10 @@
     
     <!-- Alpine.js library -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <!-- Culqui Checkout SDK -->
-    <script src="https://checkout.culqui.com/js/v4"></script>
+    
+    <!-- PayPal SDK (client-id=sb es para pruebas/sandbox, cámbialo por tu Client ID de producción) -->
+    <!-- Se configura en USD ya que PayPal no soporta Soles Peruanos (PEN) nativamente -->
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
 </head>
 <body>
     <div class="cart-container" x-data="cartApp()" x-init="init()">
@@ -29,13 +31,24 @@
                         <strong x-text="item.name"></strong>
                         <span x-text="'Cantidad: ' + item.quantity"></span>
                     </div>
+                    <!-- Mostramos en Soles en el Carrito local -->
                     <div class="item-price" x-text="'S/ ' + (item.price * item.quantity).toFixed(2)"></div>
                 </div>
             </template>
         </div>
 
         <div class="cart-total">
-            <strong>Total a Pagar: <span id="monto_total" x-text="'S/ ' + total.toFixed(2)"></span></strong>
+            <div style="display: flex; flex-direction: column; width: 100%; gap: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>Total en Soles:</strong>
+                    <span id="monto_total" x-text="'S/ ' + totalPEN.toFixed(2)"></span>
+                </div>
+                <!-- Mostramos la conversión estimada a USD para PayPal -->
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; color: var(--text-secondary);">
+                    <span>Equivalente en Dólares (PayPal):</span>
+                    <span x-text="'$' + totalUSD.toFixed(2) + ' USD'"></span>
+                </div>
+            </div>
         </div>
 
         <button @click="openPaymentModal()" class="btn-culqi" :disabled="items.length === 0">
@@ -59,9 +72,9 @@
                             <div class="payment-icon">📱</div>
                             <span>Plin</span>
                         </div>
-                        <div class="payment-card" id="pay_tarjeta" @click="selectMethod('tarjeta')">
+                        <div class="payment-card" id="pay_paypal" @click="selectMethod('paypal')">
                             <div class="payment-icon">💳</div>
-                            <span>Tarjeta</span>
+                            <span>PayPal</span>
                         </div>
                     </div>
                 </div>
@@ -74,7 +87,7 @@
                         <div class="details">
                             <p><strong>Titular:</strong> <span x-text="manualPaymentDetails[paymentMethod]?.name"></span></p>
                             <p><strong>Celular:</strong> <span x-text="manualPaymentDetails[paymentMethod]?.phone"></span></p>
-                            <p><strong>Monto:</strong> <span x-text="'S/ ' + total.toFixed(2)"></span></p>
+                            <p><strong>Monto a yapear:</strong> <span x-text="'S/ ' + totalPEN.toFixed(2)"></span></p>
                         </div>
                     </div>
                     <div class="voucher-section">
@@ -85,6 +98,19 @@
                         Confirmar y enviar comprobante
                     </button>
                     <button @click="paymentStep = 1" class="btn-secondary">Volver atrás</button>
+                </div>
+
+                <!-- Paso 3: Integración de PayPal -->
+                <div x-show="paymentStep === 3">
+                    <h3>Pagar con PayPal</h3>
+                    <p style="text-align: center; margin-bottom: 20px; font-size: 0.95rem; color: var(--text-secondary);">
+                        Vas a realizar el pago de <strong style="color: var(--text-primary);" x-text="'$' + totalUSD.toFixed(2) + ' USD'"></strong> correspondiente a tu compra.
+                    </p>
+                    
+                    <!-- Contenedor donde PayPal inyectará los botones oficiales -->
+                    <div id="paypal-button-container" style="min-height: 150px; margin-top: 10px;"></div>
+                    
+                    <button @click="paymentStep = 1" class="btn-secondary" style="margin-top: 15px;">Volver atrás</button>
                 </div>
             </div>
         </div>
@@ -103,10 +129,10 @@
                 paymentMethod: '',
                 voucherFile: null,
                 
-                // Llaves de Culqui
-                // REEMPLAZAR CON TU LLAVE PÚBLICA DE CULQUI (Prueba: pk_test_... o Producción: pk_live_...)
-                culquiPublicKey: 'pk_test_xxxxxxxxxxxxxxxxx', 
-                
+                // Tipo de cambio estimado S/ a USD (1 USD = 3.80 Soles)
+                // Modifica este valor de acuerdo al tipo de cambio deseado
+                tipoCambio: 3.80, 
+
                 manualPaymentDetails: {
                     yape: {
                         title: 'Pago con Yape',
@@ -124,17 +150,18 @@
                     }
                 },
 
-                get total() {
+                get totalPEN() {
                     return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 },
 
-                get totalCents() {
-                    return Math.round(this.total * 100);
+                get totalUSD() {
+                    // Conversión de Soles a Dólares
+                    return parseFloat((this.totalPEN / this.tipoCambio).toFixed(2));
                 },
 
                 init() {
-                    // Configurar llave pública de Culqui
-                    Culqi.publicKey = this.culquiPublicKey;
+                    // Renderizamos los botones de PayPal una sola vez
+                    this.renderPayPalButtons();
                 },
 
                 openPaymentModal() {
@@ -145,18 +172,8 @@
 
                 selectMethod(method) {
                     this.paymentMethod = method;
-                    if (method === 'tarjeta') {
-                        this.paymentModalOpen = false;
-                        
-                        // Configurar el formulario Checkout de Culqui
-                        Culqi.settings({
-                            title: 'Mi Tienda Virtual',
-                            currency: 'PEN',
-                            amount: this.totalCents
-                        });
-                        
-                        // Abrir pasarela de pago Culqui
-                        Culqi.open();
+                    if (method === 'paypal') {
+                        this.paymentStep = 3;
                     } else {
                         this.paymentStep = 2;
                     }
@@ -168,57 +185,50 @@
                         return;
                     }
                     
-                    // Simulación del envío de comprobante de pago
                     alert('¡Comprobante enviado exitosamente! Validaremos tu pago en breve.');
                     this.paymentModalOpen = false;
                     this.items = []; // Vaciar carrito después de confirmar
-                }
-            }
-        }
+                },
 
-        // Función Callback global que llama Culqui al terminar la operación con tarjeta
-        function culqi() {
-            if (Culqi.token) {
-                // Token seguro generado con éxito
-                const token = Culqi.token.id;
-                const email = Culqi.token.email;
-                
-                // Obtener acceso al contexto de Alpine.js en la página
-                const cartContainer = document.querySelector('[x-data]');
-                const app = Alpine.$data(cartContainer);
-                
-                console.log("Token de pago Culqui creado: ", token);
-                alert("Procesando pago con tarjeta... Por favor, no cierres la ventana.");
-
-                // Enviar el token y el monto al backend PHP para procesar el cobro real
-                fetch('process_payment.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: token,
-                        amount: app.totalCents,
-                        email: email
-                    })
-                })
-                .then(res => res.json())
-                .then(response => {
-                    if (response.success) {
-                        alert('¡Pago completado exitosamente! ID de la transacción: ' + response.data.id);
-                        app.items = []; // Vaciar carrito tras el pago exitoso
-                    } else {
-                        alert('Error al procesar el cobro: ' + response.error.user_message);
+                renderPayPalButtons() {
+                    // Verificamos que el SDK de PayPal se haya cargado correctamente
+                    if (typeof paypal === 'undefined') {
+                        console.error('El SDK de PayPal no pudo cargarse.');
+                        return;
                     }
-                })
-                .catch(err => {
-                    console.error('Error de conexión:', err);
-                    alert('Hubo un error al conectar con el servidor de pagos.');
-                });
-            } else {
-                // Error devuelto por Culqui (tarjeta rechazada, campos inválidos, etc.)
-                console.error(Culqi.error);
-                alert(Culqi.error.user_message || 'El pago con tarjeta no pudo ser procesado.');
+
+                    const self = this;
+                    paypal.Buttons({
+                        // Se llama al dar clic en el botón de PayPal
+                        createOrder: function(data, actions) {
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: {
+                                        currency_code: 'USD',
+                                        value: self.totalUSD.toString() // Monto total en dólares convertidos
+                                    },
+                                    description: 'Compra en Carrito Premium'
+                                }]
+                            });
+                        },
+                        // Se ejecuta al completarse la autenticación y validación del pago del cliente
+                        onApprove: function(data, actions) {
+                            return actions.order.capture().then(function(details) {
+                                // Pago aprobado exitosamente en el cliente
+                                alert('¡Pago realizado con éxito por PayPal! Gracias por tu compra, ' + details.payer.name.given_name + '.');
+                                console.log('Detalles de transacción:', details);
+                                
+                                self.paymentModalOpen = false;
+                                self.items = []; // Vaciar carrito tras la compra
+                            });
+                        },
+                        // Si ocurre un error en la pasarela de PayPal
+                        onError: function(err) {
+                            console.error('Error en pasarela PayPal:', err);
+                            alert('Hubo un problema procesando el pago con PayPal. Intente nuevamente.');
+                        }
+                    }).render('#paypal-button-container');
+                }
             }
         }
     </script>
