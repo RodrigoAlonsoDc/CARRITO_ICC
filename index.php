@@ -236,41 +236,39 @@ include 'index/header.php';
                 <div class="row">
                     <!--Start Single Courses One-->
                     <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1000ms">
-    <div class="tarjeta-dark">
-        
-        <div class="tarjeta-dark-img">
-            <img src="assets/images/resources/programacio_plc.jpg" alt="Programación básica de PLC" />
-        </div>
-        
-        <div class="tarjeta-dark-content">
-            
-            <span class="etiqueta-verde">CURSO</span>
-            
-            <h4 class="tarjeta-dark-title">
-                <a href="detalle_plc.php">Programación básica de PLC</a>
-            </h4>
-            
-            <div class="tarjeta-dark-meta">
-                <div class="meta-item">
-                    <i class="far fa-calendar-alt"></i> FEB-07
-                </div>
-                <div class="meta-item">
-                    <i class="far fa-money-bill-alt"></i> S/ 120
-                </div>
-                <div class="meta-item">
-                    <i class="fas fa-graduation-cap"></i> 40 hrs
-                </div>
-            </div>
-
-            <form action="CARRITO_PRE/index.html" method="GET" style="margin-top: 15px;">
-                <input type="hidden" name="curso" value="Programación básica de PLC">
-                <input type="hidden" name="precio" value="120.00">
-                <input type="hidden" name="moneda" value="PEN">
-                <button type="submit" class="btn-comprar-dark">Comprar ahora 💳</button>
-            </form>
-
-        </div>
-    </div>
+                        <div class="courses-one__single">
+                            <div class="courses-one__single-img">
+                                <img src="assets/images/resources/programacio_plc.jpg" alt="" />
+                                <div class="overlay-text">
+                                    <p style="font-family: 'Reem Kufi Fun';">S/120.00</p>
+                                </div>
+                            </div>
+                            <div class="courses-one__single-content">
+                                <div class="courses-one__single-content-overlay-img">
+                                    <img src="assets/images/resources/courses-v1-overlay-img1.png" alt="" />
+                                </div>
+                                <h6 class="courses-one__single-content-name">Eduardo Paredes</h6>
+                                <h4 class="courses-one__single-content-title"><a href="detalle_plc.php">Programación básica de PLC</a></h4>
+                                <div class="courses-one__single-content-review-box">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fa fa-star"></i></li>
+                                        <li><i class="fa fa-star"></i></li>
+                                        <li><i class="fa fa-star"></i></li>
+                                        <li><i class="fa fa-star"></i></li>
+                                        <li><i class="fa fa-star"></i></li>
+                                    </ul>
+                                    <div class="rateing-box">
+                                        <span>(5)</span>
+                                    </div>
+                                </div>
+                                <h2 class="course-details__price-amount" style="font-size: 15px;">S/120.00<span><del>S/150.00</del></span></h2>
+                                <ul class="courses-one__single-content-courses-info list-unstyled">
+                                    <li>4 Lecciones</li>
+                                    <li>40 Horas</li>
+                                    <li>Experto</li>
+                                </ul>
+                            </div>
+                        </div>
 </div>
                     <!--End Single Courses One-->
 
