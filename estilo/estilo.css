@@ -1,0 +1,471 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500&display=swap');
+
+	.wa{
+			position: fixed;
+	bottom: 20px;
+	right: 20px;
+	float: none;
+	z-index: 100;
+	width: 100px;
+	}
+	.logo{
+		width: 150px !important;
+		height: auto;
+	}
+
+
+.fa-ravelry:before {
+    content: "\f0a1";
+}
+ 
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.navbar-toggler-icon {
+  display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+  body{
+  margin:0px;
+  padding:0px;
+  overflow-X:hidden;
+  overflow-Y:scroll;
+  }
+  .menu{
+  position:relative;
+  width:90%;
+  z-index:9999;
+  }
+  .my-navbar{
+  width:100%;
+  border-radius: 30px;
+  padding:20px 20px;
+  background-color:white;
+  position:absolute;
+  top:20px;
+  left:0;
+  z-index:999;
+  box-shadow:0px 2px 10px rgba(0,0,0,0.2);
+  }
+  
+  .nav-item .nav-link{
+  font-family:'Oswald', sans-serif;
+  font-size:18px;
+  font-weight:300;
+  text-transform:uppercase;
+  margin:0px 10px;
+  position:relative;
+  color:black;
+  }
+  
+  .nav-item .nav-link:before{
+  position:absolute;
+  left:0;
+  content:"";
+  bottom:0;
+  width:100%;
+  height:2px;
+  transform:scaleX(0);
+  transform-origin:left;
+  background-color:brown;
+  transition:0.5s;
+  }
+  
+  
+    .nav-item .nav-link:hover:before{
+	  transform:scaleX(1);
+  transform-origin:right;
+	}
+	.navbar-brand{
+	text-transform:capitalize;
+	font-size:35px;
+	color:#2f3542;
+	font-style:italic;
+	font-family:'Oswald', sans-serif;
+	font-weight:bold;
+	}
+	
+	.navbar-scroll{
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	background-color:rgba(255,255,255,0.7);
+	padding:5px 20px;
+	transition:0.5s;
+	animation:scroll 0.6s 1;
+	}
+	
+	@keyframes scroll{
+	0%{transform:translateY(-100%);}
+	100%{transform:translateY(0%);}
+	}
+
+
+.descripcion{
+	font-size: 25px;
+}
+
+
+	.logo1{
+		width: 200px !important;
+		height: auto;
+		margin-left: 240px;
+	}
+
+	.logo2{
+		margin-top: -20px;
+		width: 180px !important;
+		height: auto;
+		margin-left:   -50px;
+	}
+
+	.ingenieria{
+		padding-top: 10px;
+		color: #157eb7;
+		margin-left: 285px;
+		font-size: 25px;
+		font-weight: bold;
+
+	}
+	.derecho{
+				padding-top: 10px;
+		color: #b91817;
+		font-weight: bold;
+		margin-left: -70px;
+	}
+
+	.fondo{
+		background: #012148;
+	}
+	.fondo1{
+		background: #EC1919;
+	}
+
+	.redondo{
+		margin-top: 10px;
+		background: white;
+		margin-bottom: 10px;
+		 border-radius: 30px;
+		 height: 275px;
+
+	}
+	.img{
+		margin-top: 20px;
+		border-radius: 50%;
+		margin-bottom: 20px;
+		margin-left: 20px;
+	}
+	.tit{
+		margin-top: 20px;
+		margin-left: -80px;
+		color:#012148;
+
+	}
+	.desc{
+		margin-left: -80px;
+		margin-right: 10PX;
+	}
+	.boton{
+		margin-left: -80px;
+		margin-top: 5px;
+		margin-bottom: 10px;
+		border-radius: 10px;
+		color:white;
+	}
+
+
+
+
+.redondo1{
+		margin-top: 10px;
+		background: white;
+		margin-bottom: 10px;
+		 border-radius: 30px;
+		 margin-left: 50px;
+
+	}
+	.img1{
+		margin-top: 20px;
+		border-radius: 50%;
+		margin-bottom: 20px;
+		margin-left: 20px;
+	}
+	.tit1{
+		margin-top: 20px;
+		margin-left: -60px;
+
+		color:#012148;
+
+	}
+	.desc1{
+		margin-left: -60px;
+		margin-right: 10px;
+	}
+	.boton1{
+		margin-left: -60px;
+		margin-top: 5px;
+		margin-bottom: 10px;
+		border-radius: 10px;
+		color:white;
+	}
+
+
+
+	.redondo2{
+	margin-top: 10px;
+		background: white;
+		margin-bottom: 40px;
+		 border-radius: 30px;
+		 margin-left: 50px;
+		 height: 275px;
+
+
+	}
+
+	.bot{
+		border-radius: 10px;
+		margin-bottom: 20px;
+	}
+
+	.redondo3{
+	margin-top: 10px;
+		background: white;
+		margin-bottom: 40px;
+		 border-radius: 30px;
+		 margin-left: 50px;
+		 height: 275px;
+
+
+	}
+
+	.logo1{
+		margin-top: 20px;
+		margin-bottom: 10px;
+		width: 150px;
+		height: auto;
+	}
+	.fot{
+		margin-left: 150px;
+		margin-right: -90px;
+	}
+	.ser{
+		margin-top: 60px;
+
+
+			}
+
+	.fa-lg{
+		padding-top: 10px;
+		color: white;
+		margin-left: 40px;
+	}		
+	.cu{
+		margin-top: -22px;
+		margin-left: 70px;
+	}
+	.no{
+		position: absolute;
+		margin-top: -250px;
+		margin-left: 150px;
+
+	}
+	.no1{
+		position: absolute;
+		margin-top: -200px;
+		margin-left: 150px;
+		color: #EC9919 !important;
+
+	}
+	.nosotros{
+		margin-left: 50px;
+		margin-top: 150px;
+	}
+	.capa{
+		color: #232D5B;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+@media only  screen and (max-width: 600px){
+.descripcion{
+	font-size: 15px;
+	margin-right: 10px;
+	margin-left: 10px;
+}
+
+
+	.logo1{
+		width: 200px !important;
+		height: auto;
+		margin-left: 80px;
+	}
+
+	.logo2{
+		margin-top: 10px;
+		width: 180px !important;
+		height: auto;
+		margin-left:90px;
+	}
+
+
+
+.ingenieria{
+		padding-top: 10px;
+		color: #157eb7;
+		margin-left: 125px;
+		font-size: 25px;
+		font-weight: bold;
+
+	}
+	.derecho{
+				padding-top: 10px;
+		color: #b91817;
+		font-weight: bold;
+		margin-left: 70px;
+	}
+
+
+
+
+
+
+
+.redondo{
+		margin-top: 10px;
+		background: white;
+		margin-bottom: 10px;
+		 border-radius: 30px;
+		 margin-left: 10px;
+		 margin-right: 10px;
+		 height: 420px;
+
+	}
+	.img{
+		margin-top: 20px;
+		border-radius: 50%;
+		margin-bottom: 20px;
+		margin-left: 100px;
+	}
+	.tit{
+		margin-top: 0px;
+		margin-left: 0px;
+		text-align: center;
+		color:#012148;
+
+	}
+	.desc{
+		margin-left: 0px;
+		text-align: center;
+	}
+	.boton{
+		margin-left: 100px;
+		margin-top: 5px;
+		margin-bottom: 10px;
+		border-radius: 10px;
+		color:white;
+	}
+
+
+
+.redondo1{
+		margin-top: 10px;
+		background: white;
+		margin-bottom: 10px;
+		 border-radius: 30px;
+		 margin-left: 10px;
+		 margin-right: 10px;
+
+	}
+	.img1{
+		margin-top: 20px;
+		border-radius: 50%;
+		margin-bottom: 20px;
+		margin-left: 100px;
+	}
+	.tit1{
+		margin-top: 20px;
+		margin-left: 0px;
+		text-align: center;
+		color:#012148;
+
+	}
+	.desc1{
+		margin-left: 0px;
+		margin-right: 10px;
+		margin-left: 10px;
+		text-align: center;
+	}
+
+
+	.boton1{
+		margin-left: 100px;
+		margin-top: 5px;
+		margin-bottom: 10px;
+		border-radius: 10px;
+		color:white;
+	}
+
+
+
+
+
+
+
+
+	.redondo2{
+margin-top: 10px;
+		background: white;
+		margin-bottom: 10px;
+		 border-radius: 30px;
+		 margin-left: 10px;
+		 margin-right: 10px;
+		 height: 370px;
+
+	}
+		.redondo3{
+margin-top: 10px;
+		background: white;
+		margin-bottom: 10px;
+		 border-radius: 30px;
+		 margin-left: 10px;
+		 margin-right: 10px;
+		 height: 470px;
+
+	}
+.fot{
+	margin-top: 10px;
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	.nosotros{
+		margin-left: 10px;
+		margin-right: 10px;
+		margin-top: 20px;
+	}
+
+	}

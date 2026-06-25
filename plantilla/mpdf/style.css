@@ -1,0 +1,42 @@
+.logo{
+  width: 220px;
+  height: auto;
+}
+.tab{
+  margin-left: 510px;
+  border: 1px solid black;
+  text-align: center;
+}
+.nuevo{
+  background: green;
+  color: white;
+  text-align: center;
+}
+table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+.firma{
+  border-bottom: 2px solid black;
+  width: 300px;
+  text-align: center;
+  margin-left: 200px;
+
+}
+.fir{
+  margin-bottom:  20px;
+}
+.logo1{
+  width: 220px;
+  height: auto;
+  margin-left: 250px;
+}
+
+.firma1{
+  margin-left: 250px;
+width: 250px;
+height: auto;
+}

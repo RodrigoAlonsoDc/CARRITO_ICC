@@ -1,0 +1,66 @@
+.container {
+    display: grid;
+    min-height: 300px;
+    grid-template:
+    "header" 100px
+    "navbar" auto
+    "section1" auto
+    "section2" auto
+    "section3" auto
+    "section4" auto
+    "section5" auto
+    "section6" auto
+    "footer" 100px;
+}
+.header {
+    padding: 0 10%;
+}
+.navbar {
+    padding: 0 15%;
+}
+.section1-title h3 {
+    font-size: 3rem;
+}
+.section1-info p {
+    font-size: 2rem;
+}
+.section2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.section2-video video {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+.section2-video {
+    width: 60%;
+    height: 100%;
+}
+.section3-contact h1 {
+    font-size: 5rem;
+}
+.section4-info h1 {
+    font-size: 4rem;
+}
+.section4-info h2 {
+    font-size: 3.5rem;
+}
+.section4-btn button {
+    font-size: 4rem;
+}
+.section5-info h2 {
+    font-size: 4rem;
+}
+.section6-button button {
+    font-size: 4rem;
+}
+.section1-info ,
+.section4-content,
+.section5-info {
+    margin: 0 20%;
+}
+.section6-money {
+    margin: 0 30%;
+}

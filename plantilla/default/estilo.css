@@ -1,0 +1,20 @@
+#baucher{
+	width: 400px !important;
+	height: auto !important  
+	;
+} 
+.valido{
+	color: green !important;
+}
+
+.novalido{
+	color: red !important;
+}
+
+@media only  screen and (max-width: 600px){
+	#baucher{
+	width: 250px !important;
+	height: auto !important  
+	;
+}
+}

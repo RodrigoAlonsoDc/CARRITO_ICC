@@ -1,0 +1,63 @@
+.container {
+    display: grid;
+    min-height: 300px;
+    grid-template:
+    "header" 100px
+    "navbar" auto
+    "section1" auto
+    "section2" auto
+    "section3" auto
+    "section4" auto
+    "section5" auto
+    "section6" auto
+    "footer" 100px;
+}
+.menu-iconsdos {
+    display: flex;
+}
+.menu-iconsdos i {
+    font-size: 3.5rem;
+    color: #4d5fe3;
+}
+.menu-iconsdos a {
+    text-decoration: none;
+}
+.menu-iconsdos
+h6, a {
+    font-size: 1.5rem;
+    color: #FFF;
+    padding: 0 0 0 10px;
+}
+.menu-contact {
+    text-align: justify;
+}
+.menu-contact h6{
+    padding-bottom: 10px;
+}
+.section1-info ,
+.section4-content,
+.section5-info {
+    margin: 0 10%;
+}
+.section6-money {
+    margin: 0 20%;
+}
+.section6-col {
+    text-align: center;
+}
+.section6-col h2{
+    font-size: 18rem;
+}
+.section6-info h1 {
+    font-size: 3rem;
+}
+.section6-info h1 {
+    font-size: 3rem;
+}
+.section6-price h3 {
+    font-size: 2.5rem;
+}
+.section6-price {
+    margin-top: 20px;
+}
+

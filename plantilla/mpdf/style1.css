@@ -1,0 +1,29 @@
+.nuevo{
+	background: #58A4D8;
+	text-align: center;
+
+}
+
+.celda {
+  border-collapse: collapse;
+}
+
+.celda, tr, td {
+  border: 1px solid black;
+}
+
+.sin{
+	border: 0px solid black; 
+}
+
+.celda,  .td {
+  border: 0px solid black !important;
+}
+  .td1 {
+  border: 0px solid black !important;
+  color: white;
+}
+.firma{
+	width: 50%;
+	height: auto;
+}

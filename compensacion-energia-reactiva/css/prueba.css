@@ -1,0 +1,391 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap');
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 62.5%;
+    height: 100%;
+}
+body {
+    min-height: 100%;
+}
+.container > * {
+    text-align: center;
+}
+.container {
+    display: grid;
+    grid-template: 
+    "header" 160px
+    "navbar" auto
+    "section1" auto
+    "section2" auto
+    "section3" auto
+    "section4" auto
+    "section5" auto
+    "section6" auto
+    "footer" 100px;
+}
+.news-container {
+    position: fixed;
+    height: 50px;
+    font-size: 3rem;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.3);
+  background: #C8102E;
+}
+.news-container ul { display: flex; list-style: none; margin: 0; transform: trnslateX(-1083px); animation: scroll 25s infinite linear; -webkit-transform: trnslateX(-1083px); -moz-transform: trnslateX(-1083px); -ms-transform: trnslateX(-1083px); -o-transform: trnslateX(-1083px);
+}
+.news-container ul li{
+    white-space: nowrap;
+    padding: 8px 20px;
+    color: white;
+    font-variant: small-caps;
+  
+}
+.news-container ul li::after {
+    content: "";
+    width: 1px;
+    height: 100%;
+    background:#fff;
+    position: absolute;
+    top: 0;
+    margin: 0 10px;
+    none: 0;
+}
+.news-container ul li::last-child::after {
+    display: none;
+}
+@keyframes scroll {
+    from {
+        transform: translateX(-100%);
+    }
+    to { transform: translateX(1083px);}
+}
+.header {
+    grid-area: header;
+    background-color: #1C1E27;
+}
+.menu-logo {
+    border-bottom: 1px solid white;
+    padding: 15px 0 15px;
+    margin-bottom: 10px;
+}
+.menu-logo img {
+    width: 220px;
+    height: 60px;
+}
+.menu-icons {
+    display: none;
+}
+.menu-iconsdos {
+    display: none;
+}
+.menu
+.menu-button {
+    padding: 16px 0 0 0;
+}
+.menu-button button {
+    padding: 10px 40px;
+    background-color: #4d5fe3;
+    font-size: 1.6rem;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    color: white;
+}
+.menu-button button:hover {
+    background-color: #2B57A4;
+}
+.navbar {
+    grid-area: navbar;
+    background-color: #242A56;
+}
+.navbar-img img {
+    max-width: 100%;
+    height: auto;
+}
+/* PRIMERA SECCION */
+.section1 {
+    grid-area: section1;
+    padding: 50px 0 30px;
+    text-align: center;
+}
+.section1-title h1, h2, h3 {
+    padding-bottom: 15px;
+}
+.section1-title h1 {
+    font-size: 2.6rem;
+}
+.section1-title h2 {
+    color: #1C1E27;
+    font-size: 2.3rem;
+}
+.section1-title h3 {
+    font-size: 2rem;
+}
+.section1-info {
+    border-left: 4px solid #1C1E27;
+    border-right: 4px solid #1C1E27;
+    padding: 10px;
+}
+.section1-info p {
+    font-size: 1.6rem;
+    padding-bottom: 15px;
+    text-align: left;
+}
+.section2 {
+    grid-area: section2;
+    background-color: #f5f5f5;
+    padding: 50px 0 30px;
+}
+.section2-video video {
+    width: 100%;
+    height: auto;
+}
+.section2-video:hover video {
+    filter: brightness(80%);
+    -webkit-filter: brightness(80%);
+}
+.video-container {
+    position: relative;
+}
+.play-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    margin-top: -24px; /* la mitad del tamaño del icono */
+    margin-left: -24px; /* la mitad del tamaño del icono */
+}
+#play-button {
+    color: white;
+    font-size: 48px;
+}
+#play-button::before {
+    content: "\f04b";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+.section3 {
+    grid-area: section3;
+    background-color: white;
+    padding: 50px 0 30px;
+}
+.section3-contact h1 {
+    padding-bottom: 30px;
+    font-size: 3rem;
+}
+.section3-icons a {
+    border-radius: 50%;
+    width: 35px; height: 35px;
+    display: inline-flex;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 2rem;
+    margin: 10px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    background-size: 100% 200%;
+    background-position: 0% 0%;
+    transition: background-position 0.5s, color 0.5s;
+    -webkit-transition: background-position 0.5s, color 0.5s;
+    -moz-transition: background-position 0.5s, color 0.5s;
+    -ms-transition: background-position 0.5s, color 0.5s;
+    -o-transition: background-position 0.5s, color 0.5s;
+}
+.section3-icons a:nth-child(1) {
+    color: #25D366;
+    background-image: linear-gradient(#fff 50%, #25D366 50%);
+}
+.section3-icons a:nth-child(2) {
+    color: #4267B2;
+    background-image: linear-gradient(#fff 50%, #4267B2 50%);
+}
+.section3-icons a:nth-child(3) {
+    color: #E1306C;
+    background-image: linear-gradient(#fff 50%, #E1306C 50%);
+}
+.section3-icons a:nth-child(4) {
+    color: #0e76a8 ;
+    background-image: linear-gradient(#fff 50%, #0e76a8  50%);
+}
+.section3-icons a:hover {
+    background-position: 0% 100%;
+    color: #fff;
+}
+.section4 {
+    grid-area: section4;
+    background-color: #242A56;
+    padding: 50px 0 30px;
+    text-align: center;
+}
+.section4-info h1 {
+    font-size: 2.6rem;
+}
+.section4-info h1, h2 {
+    color: #fff;
+    padding-bottom: 15px;
+}
+.section4-info h2 {
+    font-size: 2.3rem;
+}
+.contador {
+    color: #fff;
+    display: grid;
+    font-size: 4.5rem;
+    grid-template: 
+    "header Header";
+    padding: 15px 0;
+}
+.responsivo1 {
+    display: grid;
+    grid-template: 
+    "header header";
+}
+.responsivo2 {
+    display: grid;
+    grid-template: 
+    "header header";
+}
+.temp {
+    font-size: 4.5rem;
+}
+.h3 span {
+    display: none;
+}
+.section4-btn button {
+    background-color: #4d5fe3;
+    border-radius: 67px;
+    color: #fff;
+    font-size: 1.6rem;
+    padding: 15px 30px;
+}
+.section4-btn button:hover {
+    background-color: #4b1492;
+}
+.section5 {
+    grid-area: section5;
+    background-color: white;
+    padding: 50px 0 30px;
+}
+.section5-info h1, h2 {
+    padding-bottom: 15px;
+}
+.section5-info h1 {
+    font-size: 2.6rem;
+}
+.section5-info h2 {
+    color: #1C1E27;
+    font-size: 2.8rem;
+}
+button.accordion {
+    width: 100%;
+    background-color: whitesmoke;
+    border: none;
+    outline: none;
+    text-align: left;
+    padding: 15px 20px;
+    font-size: 1.8rem;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s linear;
+    -webkit-transition: background-color 0.2s linear;
+    -moz-transition: background-color 0.2s linear;
+    -ms-transition: background-color 0.2s linear;
+    -o-transition: background-color 0.2s linear;
+}
+button.accordion:after {
+    content: "\f150";
+    font-family: "fontawesome";
+    font-size: 1.8rem;
+    float: right;
+}
+button.accordion.is-open:after {
+    content: "\f151";
+}
+button.accordion:hover,
+button.accordion.is-open {
+    background-color: #ddd;
+}
+.accordion-content {
+    background-color: white;
+    border-left: 1px solid whitesmoke;
+    border-right: 1px solid whitesmoke;
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-in-out;
+    -webkit-transition: max-height 0.2s ease-in-out;
+    -moz-transition: max-height 0.2s ease-in-out;
+    -ms-transition: max-height 0.2s ease-in-out;
+    -o-transition: max-height 0.2s ease-in-out;
+}
+.accordion-content ul li {
+    font-size: 1.8rem;
+    padding: 10px;
+    text-align: left;
+}
+.section6 {
+    grid-area: section6;
+    background-color: white;
+    padding: 50px 0 30px;
+}
+.section6-info h1 {
+    font-size: 2.6rem;
+    padding-bottom: 15px;
+}
+.section6-money {
+    padding-bottom: 15px;
+}
+.section6-col h2 {
+    color: #242A56;
+    font-size: 10rem;
+}
+.section6-col h2:hover {
+    color: #4d5fe3;
+}
+.section6-col sup {
+    font-size: 5rem;
+}
+.section6-price h3 {
+    font-size: 2.5rem;
+}
+.section6-price p {
+    font-size: 1.6rem;   
+}
+.section6-button button {
+    background-color: #242A56;
+    border-radius: 67px;
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 15px 30px;
+}
+.section6-button button:hover {
+    background-color: #4d5fe3;
+}
+.footer {
+    grid-area: footer;
+    background-color: #1C1E27;
+    padding: 15px;
+}
+.footer-img {
+    width: 100%;
+    justify-content: left;
+}
+.footer-img img {
+    width: 220px;
+    height: 60px;
+}

@@ -1,0 +1,89 @@
+
+.morado{
+  background: purple;
+  color: white;
+  font-weight: bold;
+}
+table {
+
+  border-collapse: collapse;
+
+}
+
+
+
+table, th, td {
+
+  border: 1px solid black;
+
+}
+
+.logo{
+
+  width: 220px;
+
+  height: auto;
+
+}
+
+.dat{
+
+	background: #CAF5AD;
+
+}
+
+.celda1 {
+
+  border: 1px solid black;
+
+  text-align: center;
+
+  font-size: 12px;
+
+}
+
+.vacio{
+
+	color: white;
+
+}
+
+td{
+
+	border:1px solid black;
+
+}
+
+.firma{
+
+	width: 200px;
+
+	height: auto;
+
+}
+
+.firma1{
+
+  width: 40px;
+
+  height: auto;
+
+}
+
+.espacio{
+
+  width: 120px;
+
+}
+
+.bor{
+
+  width: 250px;
+
+}
+
+.tempe{
+
+     width: 200px;
+
+}

@@ -22,5 +22,5 @@ jobs:
           privateKey: ${{ secrets.FTP_KEY }}
           passphrase: ${{ secrets.FTP_KEY_PASSPHRASE }}
           localDir: '.'
-          remoteDir: 'public_html/CARRITO_PRE'
+          remoteDir: 'public_html'
           exclude: '.git/**,.github/**'

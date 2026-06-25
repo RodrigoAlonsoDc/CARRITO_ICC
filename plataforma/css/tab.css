@@ -1,0 +1,87 @@
+.nav{
+    border-top: 1px solid white;
+}
+
+.nav1{
+    background: #2980B9;
+    color: white !important;
+}
+.nav-link{
+    color: white !important;
+}
+
+.nav-link:hover{
+    background: white;
+    color: black !important;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+
+.logo{
+    width: 150px;
+}
+
+.sect{
+
+}
+
+
+
+
+
+
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*/
+.nav-pills-custom .nav-link {
+    color: #aaa;
+    background: #2980B9;
+    position: relative;
+}
+
+.nav-pills-custom .nav-link.active {
+    color: #2980B9;
+    background: #2980B9;
+}
+
+
+/* Add indicator arrow for the active tab */
+@media (min-width: 992px) {
+    .nav-pills-custom .nav-link::before {
+        content: '';
+        display: block;
+        border-top: 8px solid transparent;
+        border-left: 10px solid #2980B9;
+        border-bottom: 8px solid transparent;
+        position: absolute;
+        top: 50%;
+        right: -10px;
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+}
+
+.nav-pills-custom .nav-link.active::before {
+    opacity: 1;
+}
+
+
+
+
+
+/*
+*
+* ==========================================
+* FOR DEMO PURPOSE
+* ==========================================
+*/
+
+
+body {
+    min-height: 100vh;
+    
+}
