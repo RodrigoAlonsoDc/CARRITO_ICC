@@ -229,6 +229,8 @@ include 'index/header.php';
 
 <?php
 $api_url = "https://carrito-backend-ronl.onrender.com/api/courses";
+
+// Obtener datos del API
 $api_response = @file_get_contents($api_url);
 $all_courses = $api_response ? json_decode($api_response, true) : [];
 $ingenieria_courses = array_slice($all_courses, 0, 4);
