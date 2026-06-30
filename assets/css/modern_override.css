@@ -1,4 +1,4 @@
-/* MODERN OVERRIDE CSS 
+﻿/* MODERN OVERRIDE CSS 
    Se aplica sobre zilom.css para modernizar el UI sin tocar el HTML base 
 */
 
@@ -14,7 +14,7 @@
   --mo-font-sans: 'Inter', 'Kumbh Sans', sans-serif;
 }
 
-/* --- TIPOGRAFÍA Y CUERPO --- */
+/* --- TIPOGRAFÃA Y CUERPO --- */
 body, h1, h2, h3, h4, h5, h6, p, a, span {
   font-family: var(--mo-font-sans) !important;
 }
@@ -118,7 +118,7 @@ body {
   letter-spacing: 2px;
 }
 .image-layer-overlay {
-  background-color: rgba(0, 0, 0, 0.6) !important; /* Más oscuro para contraste */
+  background-color: rgba(0, 0, 0, 0.6) !important; /* MÃ¡s oscuro para contraste */
 }
 
 /* --- SECCIONES (BACKGROUNDS Y ESPACIADOS) --- */
@@ -314,7 +314,7 @@ body {
 /* --- MEGA MENU --- */
 .main-menu__list > li > ul.mo-mega-menu {
   width: 750px;
-  display: flex !important;
+  display: flex;
   flex-direction: row;
   background-color: #ffffff !important;
   border: 1px solid var(--mo-border);
@@ -405,4 +405,129 @@ body {
   background-color: #ffffff !important;
   border-color: var(--mo-primary) !important;
   transform: translateX(3px);
+}
+
+/* --- MOBILE RESPONSIVE MEGA MENU --- */
+.mobile-nav__container .main-menu__list > li > ul.mo-mega-menu {
+  width: 100% !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 10px 0 !important;
+  position: static !important;
+  transform: none !important;
+  left: auto !important;
+  top: auto !important;
+  flex-direction: column;
+}
+.mobile-nav__container .mo-mega-menu .mo-mega-menu-left {
+  display: none !important; /* Ocultamos la imagen y botón en celular para ahorrar espacio */
+}
+.mobile-nav__container .mo-mega-menu .mo-mega-menu-right {
+  padding-left: 0 !important;
+  width: 100% !important;
+}
+.mobile-nav__container .mo-mega-menu .mo-mega-menu-right ul {
+  display: block !important;
+  grid-template-columns: 1fr !important;
+  padding-left: 20px !important;
+}
+.mobile-nav__container .mo-mega-menu .mo-mega-menu-right ul li a {
+  background-color: transparent !important;
+  padding: 8px 0 !important;
+  font-size: 13px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.mobile-nav__container .mo-mega-menu .mo-mega-menu-right ul li a:hover {
+  color: #ffffff !important;
+  transform: translateX(5px);
+}
+
+/* --- GLOBAL MOBILE HEADER FIXES --- */
+@media (max-width: 1199px) {
+  /* Fix Top Black Bar */
+  .main-header--one__top {
+    padding: 10px 0 !important;
+  }
+  .main-header--one__top-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Left side: Logo + Tiktok */
+  .main-header--one__top-left {
+    float: none !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+  
+  .main-header--one__top-logo {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 15px !important;
+    padding-top: 0 !important;
+    flex-wrap: wrap !important;
+  }
+  
+  .main-header--one__top-logo img {
+    max-width: 160px !important;
+    height: auto !important;
+  }
+  
+  /* Right side: Hide socials and contact info on mobile because they overflow and are in the hamburger menu anyway */
+  .main-header--one__top-right {
+    display: none !important;
+  }
+
+  /* Fix White Bar (Hamburger + Aula Virtual) */
+  .main-header-one__bottom {
+    padding: 10px 0 !important;
+  }
+  
+  .main-menu__inner {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 15px !important;
+  }
+  
+  .mobile-nav__toggler {
+    position: static !important;
+    display: block !important;
+    font-size: 28px !important;
+    color: var(--mo-primary) !important;
+    margin: 0 !important;
+    padding: 5px !important;
+  }
+  
+  .main-menu .left {
+    width: auto !important;
+    display: block !important;
+  }
+  
+  .main-menu .right {
+    display: block !important;
+    float: none !important;
+  }
+  
+  .main-menu__right {
+    display: block !important;
+  }
+  
+  .main-menu__right-search-box .thm-btn {
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+  }
+  
+  /* Hide the actual desktop menu ul */
+  .main-menu__inner .left .main-menu__list {
+    display: none !important;
+  }
 }
